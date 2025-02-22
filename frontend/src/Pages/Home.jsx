@@ -1,6 +1,6 @@
-import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import AdventureSection from "../components/AdventureSection";
 
 const Home = () => {
   return (
@@ -10,10 +10,8 @@ const Home = () => {
         className="relative flex flex-col items-center justify-center text-center min-h-screen bg-cover bg-center"
         style={{ backgroundImage: "url('/src/assets/images/bg.jpg')" }}
       >
-        {/* Dark overlay */}
         <div className="absolute inset-0 bg-black opacity-50"></div>
 
-        {/* Content */}
         <motion.div
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -29,7 +27,6 @@ const Home = () => {
             <br /> NovelAI offers the tools to unlock your creative potential.
           </p>
 
-          {/* Buttons */}
           <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
             <Link
               to="/generate-images"
@@ -47,28 +44,9 @@ const Home = () => {
         </motion.div>
       </div>
 
-      {/* "Choose Your Adventure" Section */}
-      <div className="relative text-center py-16 bg-[#0a0b1d] border-t border-gray-700">
-        <div className="border-t border-gray-700 w-16 mx-auto mb-6"></div>
-        <h2 className="text-white text-3xl md:text-4xl font-bold">
-          Choose your adventure.
-        </h2>
-        <p className="text-gray-400 text-lg mt-2">
-          Learn how Kahani AI can enhance your creative potential.
-        </p>
-
-        {/* Buttons */}
-        <div className="mt-6 flex gap-4 justify-center">
-          <Link to="/generate-images" className="bg-[#1e1f3b] text-white px-6 py-3 rounded-lg text-lg border border-gray-600 hover:bg-gray-700 transition">
-            🖼️ Image Generator
-          </Link>
-          <Link to="/writing-assistant" className="bg-[#1e1f3b] text-white px-6 py-3 rounded-lg text-lg border border-gray-600 hover:bg-gray-700 transition">
-            ✍️ Writing Assistant
-          </Link>
+      <AdventureSection />
         </div>
-      </div>
-    </div>
-  );
+       );
 };
 
 export default Home;
