@@ -9,7 +9,7 @@ const FloatingButtons = ({ isScrolled, activeSection, setActiveSection }) => {
     <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="fixed top-20 left-0 right-0 z-40 bg-black/30 backdrop-blur-sm py-4"
+      className="fixed top-20 left-0 right-0 z-40 py-4"
     >
       <ToggleButtons 
         activeSection={activeSection} 
