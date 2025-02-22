@@ -1,0 +1,10 @@
+<svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="icon-mail">
+<mask id="mask0_1_65" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="25" height="25">
+<rect id="Background" x="0.449951" y="0.500366" width="24" height="24" fill="white"/>
+</mask>
+<g mask="url(#mask0_1_65)">
+<path id="Shape" fill-rule="evenodd" clip-rule="evenodd" d="M4.44995 4.50037H20.45C21.5545 4.50037 22.45 5.3958 22.45 6.50037V18.5004C22.45 19.6049 21.5545 20.5004 20.45 20.5004H4.44995C3.34538 20.5004 2.44995 19.6049 2.44995 18.5004V6.50037C2.44995 5.40037 3.34995 4.50037 4.44995 4.50037V4.50037ZM20.45 7.88037V6.50037H4.44995V7.88037L12.45 11.8804L20.45 7.88037V7.88037ZM20.45 10.1204L12.9 13.8904C12.6169 14.033 12.283 14.033 12 13.8904L4.44995 10.1204V18.5004H20.45V10.1204V10.1204Z" fill="#9E9E9E"/>
+</g>
+</g>
+</svg>
