@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+:root {
+  --primary-bg: #2d294e;
+  --dark-bg: #0d0d0d;
+  --light-bg: #f9fafb;
+  --light-bg-alt: #e5e7eb; /* Light grey background */
+  --input-border-dark: #606060;
+  --input-bg-dark: #4a4a4a;
+  --input-border-light: #d1d5db;
+  --text-white: #ffffff;
+  --placeholder-text: #9ca3af;
+  --hover-bg: #3c385f;
+  --gradient-start: #ff7e5f;
+  --gradient-end: #feb47b;
+}
