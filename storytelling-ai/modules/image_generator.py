@@ -7,7 +7,7 @@ pipe = StableDiffusionPipeline.from_pretrained(
     torch_dtype=torch.float32  # Ensure compatibility with CPU
 ).to("cpu")
 
-def generate_image(prompt, save_path="C:\\Users\\sanni\\OneDrive\\Desktop\\Story-Telling\\storytelling-ai\\data\\generated_images\\image.png"):
+def generate_image(prompt, save_path="C:\\Users\\Souma Chakraborty\\OneDrive\\Documents\\GitHub\\Story-Telling\\storytelling-ai\\data\\generate_images\\image1.png"):
 
     image = pipe(prompt).images[0]  
     image.save(save_path)  
