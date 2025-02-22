@@ -99,23 +99,23 @@ const PricingCard = ({ title, price, features, isPopular, period }) => (
 );
 
 const WritingAssistantContent = () => {
-  const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
-  const [scrollX, setScrollX] = useState(0);
+    const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
+    const [scrollX, setScrollX] = useState(0);
+  
+    const features = [
+      { title: "Customizable Workspace", description: "Customize colors and fonts with accessibility features.", image: "https://img.freepik.com/premium-vector/vibrant-workspace-featuring-computer-charts-documents-office-supplies-online-documentation-online-document-customizable-isometric-illustration_538213-148602.jpg" },
+      { title: "Stay Organized", description: "Organize stories into shelves for quick access.", image: "https://www.trios.com/uploads/2021/10/How-to-Stay-Organized-in-Online-Classes-3.jpg" },
+      { title: "AI Generation Presets", description: "Choose AI presets that fit your needs.", image: "https://appleteacher.apple.com/aws/mopac/public/250032751020/content/7f4b9442-3a0f-465e-81c2-efaab1842029/243a39ed-3664-4d98-ba68-586caeddef32.PNG" },
+      { title: "AI Memory", description: "Save details so AI remembers important elements.", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOONKEtScAm_PKbCBbncJ6Y7b0GoHSVr_KCg&s" }
+    ];
+  
+    const loreCards = [
+      { image: "https://cdn.prod.website-files.com/6600e1eab90de089c2d9c9cd/662c0927dc614ac9adfac1f6_661a4a55b670e337e03eac96_Monster%25205.webp", title: "The Assassin", description: "Blonde hair, broad shoulders, cold and calculating demeanor...", tags: ["assassin", "contractor"] },
+      { image: "https://as1.ftcdn.net/jpg/05/43/16/84/1000_F_543168438_GbIlWCil7YDtAUsTr4UNcpTXQ9FKdyLA.jpg", title: "Jurassic", description: "A dimly lit Dino in disarray. The Wings are partially torn, with blood splattered across the Arms...", tags: ["Huge", "Dinosaur", "ai"] },
+      { image: "https://img.freepik.com/premium-photo/ai-generated-concept-human_776674-65169.jpg", title: "Wonder Girl", description: "Blond Sweeping fast Wonder girl who never misser her shot on her enemies.", tags: ["Smart", "Super", "Blonde", "Girl"] },
+      { image: "https://thumbs.dreamstime.com/b/illuminated-futuristic-autonomous-car-science-fiction-scene-selective-focus-ai-generated-vehicle-concept-267955611.jpg", title: "Futuristic Car", description: "This hyperactive, optimistic, yet ditsy biological car relies heavily on her pilot to navigate.", tags: ["car", "pecaid", "ai", "navigation"] }
 
-  const features = [
-    { title: "Customizable Workspace", description: "Customize colors and fonts with accessibility features.", image: "https://img.freepik.com/premium-vector/vibrant-workspace-featuring-computer-charts-documents-office-supplies-online-documentation-online-document-customizable-isometric-illustration_538213-148602.jpg" },
-    { title: "Stay Organized", description: "Organize stories into shelves for quick access.", image: "https://www.trios.com/uploads/2021/10/How-to-Stay-Organized-in-Online-Classes-3.jpg" },
-    { title: "AI Generation Presets", description: "Choose AI presets that fit your needs.", image: "https://appleteacher.apple.com/aws/mopac/public/250032751020/content/7f4b9442-3a0f-465e-81c2-efaab1842029/243a39ed-3664-4d98-ba68-586caeddef32.PNG" },
-    { title: "AI Memory", description: "Save details so AI remembers important elements.", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOONKEtScAm_PKbCBbncJ6Y7b0GoHSVr_KCg&s" }
-  ];
-  const loreCards = [
-    { image: "/assassin.jpg", title: "The Assassin", description: "Blonde hair, broad shoulders, cold and calculating demeanor...", tags: ["assassin", "contractor"] },
-    { image: "/hotel-room.jpg", title: "Room 27", description: "A dimly lit hotel room in disarray. The curtains are partially torn, with blood splattered across the walls...", tags: ["room27", "hotel room", "crime scene"] },
-    { image: "/spaceship.jpg", title: "Pecaid", description: "This hyperactive, optimistic, yet ditsy biological spaceship relies heavily on her pilot to navigate.", tags: ["spaceship", "pecaid", "ai", "navigation"] },
-    { image: "/assassin.jpg", title: "The Assassin", description: "Blonde hair, broad shoulders, cold and calculating demeanor...", tags: ["assassin", "contractor"] },
-    { image: "/hotel-room.jpg", title: "Room 27", description: "A dimly lit hotel room in disarray. The curtains are partially torn, with blood splattered across the walls...", tags: ["room27", "hotel room", "crime scene"] },
-    { image: "/spaceship.jpg", title: "Pecaid", description: "This hyperactive, optimistic, yet ditsy biological spaceship relies heavily on her pilot to navigate.", tags: ["spaceship", "pecaid", "ai", "navigation"] }
-  ];
+    ];
 
   const reviews = [
     { author: "Sarah Johnson", role: "Professional Writer", content: "This AI writing assistant has transformed my workflow. The customization options are incredible!", rating: 5 },
@@ -165,8 +165,8 @@ const WritingAssistantContent = () => {
   // Auto-scroll for lore cards
   useEffect(() => {
     const interval = setInterval(() => {
-      setScrollX((prev) => (prev <= -300 * 6 ? 0 : prev - 1));
-    }, 30);
+      setScrollX((prev) => (prev <= -300 * 6 ? 0 : prev - 2));
+    }, 15);
     return () => clearInterval(interval);
   }, []);
 
@@ -214,13 +214,13 @@ const WritingAssistantContent = () => {
             className="flex gap-6"
             style={{ transform: `translateX(${scrollX}px)` }}
           >
-            {[...Array(2)].flatMap((_, i) => features.map((feature, index) => (
+            {[...Array(2)].flatMap((_, i) => loreCards.map((card, index) => (
               <LoreCard
                 key={`${i}-${index}`}
-                image={loreCards.image}
-                title={loreCards.title}
-                description={loreCards.description}
-                tags={["ai", "writing", "assistant"]}
+                image={card.image}
+                title={card.title}
+                description={card.description}
+                tags={card.tags}
               />
             )))}
           </motion.div>
