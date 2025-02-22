@@ -1,0 +1,52 @@
+{
+    "the Lost World": {
+        "personality": {
+            "traits": [
+                "adventurous",
+                "mysterious",
+                "resilient"
+            ],
+            "archetype": "explorer",
+            "temperament": "curious"
+        },
+        "backstory": "A hidden realm untouched by modern civilization, the Lost World harbors ancient secrets and prehistoric life forms. Cut off from the outside world for millennia, it maintains a delicate ecosystem where time seems to stand still. Its discovery threatens to upset the balance between past and present.",
+        "characteristics": {
+            "environment": "prehistoric jungle",
+            "climate": "tropical",
+            "inhabitants": [
+                "dinosaurs",
+                "primitive tribes",
+                "unique flora"
+            ]
+        },
+        "significance": "Acts as both setting and character, influencing all who enter its domain"
+    },
+    "Arthur": {
+        "personality": "undefined",
+        "backstory": ""
+    },
+    "King Henry VIII": {
+        "personality": "undefined",
+        "backstory": ""
+    },
+    "King Edward": {
+        "personality": "undefined",
+        "backstory": ""
+    },
+    "Edward": {
+        "personality": "undefined",
+        "backstory": ""
+    },
+    "King Arthur": {
+        "personality": "undefined",
+        "backstory": ""
+    },
+    "the \"Kingdom of Kings": {
+        "personality": "undefined",
+        "backstory": ""
+    },
+    "UFC": {
+        "personality": "undefined",
+        "backstory": ""
+    }
+}

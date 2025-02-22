@@ -1,0 +1,12 @@
+transformers
+torch
+spacy
+language-tool-python
+datasets
+nltk
+numpy
+pandas
+###python -m spacy download en_core_web_sm
+
+# Install NLTK data (optional, for future adjective extraction)
+###python -m nltk.downloader punkt averaged_perceptron_tagger
