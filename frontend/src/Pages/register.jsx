@@ -1,10 +1,53 @@
-// Register.jsx
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "../firebase/config";
+import PhoneVerification from "../components/PhoneVerification"; // Ensure this component exists
 
-function Register() {
+export const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const [step, setStep] = useState(1);
+  const [phoneVerified, setPhoneVerified] = useState(false);
+
+  // Step 1: Validate and move to phone verification
+  const handleInitialSubmit = async (e) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+    setError(""); // Clear previous errors
+    setStep(2); // Move to phone verification
+  };
+
+  // Step 2: Handle phone verification and register the user
+  const handlePhoneVerificationComplete = async () => {
+    setPhoneVerified(true);
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      navigate("/");
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  // Google Sign-Up
+  const handleGoogleRegister = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+      navigate("/");
+    } catch (error) {
+      setError("Google sign-up failed");
+    }
+  };
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-gradient-to-br from-gray-900 to-black">
@@ -34,62 +77,98 @@ function Register() {
           </h2>
           <p className="text-gray-400 mb-7 text-center">Register Today</p>
 
-          <form className="space-y-5">
-            <input
-              type="text"
-              placeholder="Name"
-              className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-yellow-400 focus:outline-none"
-            />
-            <input
-              type="email"
-              placeholder="example@email.com"
-              className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-yellow-400 focus:outline-none"
-            />
-            <input
-              type="tel"
-              placeholder="Phone Number"
-              className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-yellow-400 focus:outline-none"
-            />
+          {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
 
-            <div className="relative">
+          {step === 1 ? (
+            // Step 1: Registration Form
+            <form onSubmit={handleInitialSubmit} className="space-y-5">
               <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Password"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Name"
                 className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-yellow-400 focus:outline-none"
+                required
               />
-              <span
-                className="absolute right-3 top-3 text-sm text-gray-400 cursor-pointer hover:text-yellow-400"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? "HIDE" : "SHOW"}
-              </span>
-            </div>
-
-            <div className="relative">
               <input
-                type={showConfirmPassword ? "text" : "password"}
-                placeholder="Confirm Password"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="example@email.com"
                 className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-yellow-400 focus:outline-none"
+                required
               />
-              <span
-                className="absolute right-3 top-3 text-sm text-gray-400 cursor-pointer hover:text-yellow-400"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              >
-                {showConfirmPassword ? "HIDE" : "SHOW"}
-              </span>
-            </div>
+              <input
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="Phone Number"
+                className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-yellow-400 focus:outline-none"
+                required
+              />
 
-            <button
-              type="submit"
-              className="w-full p-3 bg-gradient-to-r from-blue-900 to-blue-700 text-white rounded-lg transition duration-300 hover:from-blue-800 hover:to-blue-600"
-            >
-              Register
-            </button>
-          </form>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Password"
+                  className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-yellow-400 focus:outline-none"
+                  required
+                />
+                <span
+                  className="absolute right-3 top-3 text-sm text-gray-400 cursor-pointer hover:text-yellow-400"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? "HIDE" : "SHOW"}
+                </span>
+              </div>
+
+              <div className="relative">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Confirm Password"
+                  className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-yellow-400 focus:outline-none"
+                  required
+                />
+                <span
+                  className="absolute right-3 top-3 text-sm text-gray-400 cursor-pointer hover:text-yellow-400"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ? "HIDE" : "SHOW"}
+                </span>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full p-3 bg-gradient-to-r from-blue-900 to-blue-700 text-white rounded-lg transition duration-300 hover:from-blue-800 hover:to-blue-600"
+              >
+                Continue to Phone Verification
+              </button>
+
+              <button
+                type="button"
+                onClick={handleGoogleRegister}
+                className="w-full p-3 bg-white text-gray-800 rounded-lg transition duration-300 hover:bg-gray-100 flex items-center justify-center gap-2"
+              >
+                <img src="/google-icon.png" alt="Google" className="w-5 h-5" />
+                Sign up with Google
+              </button>
+            </form>
+          ) : (
+            // Step 2: Phone Verification
+            <PhoneVerification
+              phoneNumber={phone}
+              userData={{ name, email, phone }}
+              onComplete={handlePhoneVerificationComplete}
+            />
+          )}
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default Register;
