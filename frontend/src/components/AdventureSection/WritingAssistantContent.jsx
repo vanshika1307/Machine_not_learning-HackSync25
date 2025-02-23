@@ -205,10 +205,17 @@ const WritingAssistantContent = () => {
       </div>
 
       {/* Lorebook Section */}
-      <div className="mb-24">
-        <h2 className="text-3xl md:text-4xl text-white font-semibold mb-6">You already know your world,</h2>
-        <h2 className="text-3xl md:text-4xl text-white font-semibold mb-12">make sure the AI knows it too.</h2>
+      <div className="mb-24 ">
+      <div style={{ transform: "rotate3d(1, 0, 0, 30deg)"}} className="text-center space-y-4">
+  <h2 className="text-4xl md:text-5xl font-serif bg-gradient-to-b from-[#FFD700] via-[#DAA520] to-[#8B6508] bg-clip-text text-transparent">
+    You already know your world,
+  </h2>
+  <p className="text-4xl md:text-5xl font-serif bg-gradient-to-b from-[#FFD700] via-[#DAA520] to-[#8B6508] bg-clip-text text-transparent">
+    make sure the AI knows it too.
+  </p>
+</div>
 
+            <br></br>
         <div className="relative w-full overflow-hidden">
           <motion.div
             className="flex gap-6"

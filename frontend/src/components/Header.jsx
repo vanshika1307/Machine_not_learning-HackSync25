@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Volume2, VolumeX } from "lucide-react";
 import PropTypes from "prop-types";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../firebase/config";
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -9,6 +11,7 @@ const Header = () => {
   const [volume, setVolume] = useState(0.5);
   const location = useLocation();
   const audioRef = useRef(null);
+  const [user] = useAuthState(auth);
 
   useEffect(() => {
     audioRef.current = new Audio("/music.mp3");
@@ -35,11 +38,10 @@ const Header = () => {
 
   const toggleMusic = () => {
     if (!audioRef.current) return;
-    
     if (isPlaying) {
       audioRef.current.pause();
     } else {
-      audioRef.current.play().catch(error => console.log("Playback error:", error));
+      audioRef.current.play().catch((error) => console.log("Playback error:", error));
     }
     setIsPlaying(!isPlaying);
   };
@@ -52,32 +54,32 @@ const Header = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
           <div className="text-white text-2xl font-bold">
             <Link to="/" className="hover:text-yellow-400 transition duration-300">
               Kahani.AI
             </Link>
           </div>
 
-          {/* Navigation Links */}
           <div className="hidden md:flex items-center space-x-8">
             <NavLink to="/pricing" isActive={location.pathname === "/pricing"}>Pricing</NavLink>
             <NavLink to="/blog" isActive={location.pathname === "/blog"}>Blog</NavLink>
             <NavLink to="/discord" isActive={location.pathname === "/discord"}>Discord</NavLink>
-            <NavLink to="/login" isActive={location.pathname === "/login"}>Login</NavLink>
-
-            {/* Enhanced Music Controls */}
+            {user ? (
+              <button
+                onClick={() => auth.signOut()}
+                className="text-white hover:text-yellow-400 transition duration-300"
+              >
+                Logout
+              </button>
+            ) : (
+              <NavLink to="/login" isActive={location.pathname === "/login"}>Login</NavLink>
+            )}
             <div className="flex items-center gap-3">
               {!isPlaying && (
-                <span className="text-gray-400 text-sm font-medium italic">
-                  wanna hear some music?
-                </span>
+                <span className="text-gray-400 text-sm font-medium italic">wanna hear some music?</span>
               )}
               <div className="flex items-center gap-4">
-                <button 
-                  onClick={toggleMusic} 
-                  className="relative group"
-                >
+                <button onClick={toggleMusic} className="relative group">
                   <div className="w-12 h-12 rounded-full bg-gradient-to-r from-gray-800 to-gray-900 flex items-center justify-center shadow-lg overflow-hidden border border-gray-700 group-hover:border-yellow-400 transition-all duration-300">
                     <div
                       className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 ${
@@ -85,7 +87,7 @@ const Header = () => {
                       }`}
                       style={{
                         background: "radial-gradient(circle at center, #1a1a1a 40%, #2a2a2a 60%, #333 100%)",
-                        boxShadow: "inset 0 0 10px rgba(0,0,0,0.5)"
+                        boxShadow: "inset 0 0 10px rgba(0,0,0,0.5)",
                       }}
                     >
                       <div className="w-1 h-8 bg-yellow-400/80 rounded-full absolute transform rotate-45"></div>
@@ -94,7 +96,6 @@ const Header = () => {
                     </div>
                   </div>
                 </button>
-
                 {isPlaying && (
                   <div className="flex items-center gap-2 bg-gray-800/50 rounded-full px-3 py-1.5 border border-gray-700">
                     {volume === 0 ? (
@@ -122,7 +123,6 @@ const Header = () => {
   );
 };
 
-// NavLink component remains the same
 const NavLink = ({ to, children, isActive }) => {
   return (
     <Link
