@@ -1,102 +1,78 @@
+# storytelling-ai/modules/image_generator.py
+
 import requests
 import os
 from pathlib import Path
 import time
 import cv2
-import numpy as np
 
-# Function to crop the bottom 15% of the image
-def crop_bottom_15_percent(image_path):
-    # Read the image
+def crop_bottom_15_percent(image_path: str) -> None:
+    """
+    Crop the bottom 15% of the image and save the result back to the file.
+    """
     image = cv2.imread(image_path)
-
-    # Get the dimensions of the image
-    image_height, image_width = image.shape[:2]
-
-    # Calculate the new height (remove 15% from the bottom)
-    new_height = int(image_height * 0.85)
-
-    # Crop the image (keep only the top 85% of the original height)
+    if image is None:
+        print(f"Error reading image from {image_path}")
+        return
+    height, width = image.shape[:2]
+    new_height = int(height * 0.85)
     cropped_image = image[:new_height, :]
-
-    # Save the cropped image
     cv2.imwrite(image_path, cropped_image)
     print(f"Bottom 15% removed. Image saved to {image_path}")
 
-# Function to download image
-def download_image():
-    # Define the save directory
-    save_dir = Path("C:\\Users\\Souma Chakraborty\\OneDrive\\Documents\\GitHub\\Story-Telling\\storytelling-ai\\data\\generate_images")
-    
-    # Create directory if it doesn't exist
+def download_image(prompt: str, save_dir: str) -> str:
+    """
+    Downloads an image from pollinations.ai based on the prompt,
+    crops the bottom 15% of the image, and returns a relative URL.
+    """
+    # Ensure the directory exists.
+    save_dir = Path(save_dir)
     save_dir.mkdir(parents=True, exist_ok=True)
     
-    # Get user input for the prompt
-    print("\nWhat kind of image would you like to generate?")
-    prompt = input("Enter your prompt: ").strip()
-    
-    # Create a unique filename using timestamp
+    # Create a unique filename using a timestamp.
     timestamp = time.strftime("%Y%m%d_%H%M%S")
     filename = f"image_{timestamp}.jpg"
     save_path = save_dir / filename
-    
-    # Download the image
-    try:
-        # Replace spaces with underscores for the URL
-        url_prompt = prompt.replace(" ", "_")
-        url = f"https://pollinations.ai/p/{url_prompt}"
-        response = requests.get(url)
-        
-        # Check if the request was successful
-        response.raise_for_status()
-        
-        # Save the image
-        with open(save_path, 'wb') as file:
-            file.write(response.content)
-        
-        print(f'\nSuccess! Image saved as: {filename}')
-        print(f'Full path: {save_path}')
-        
-        # Crop the bottom 15% of the image
-        crop_bottom_15_percent(str(save_path))
 
-        return str(save_path)
+    # Prepare the URL by replacing spaces with underscores.
+    url_prompt = prompt.replace(" ", "_")
+    url = f"https://pollinations.ai/p/{url_prompt}"
+    
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        with open(save_path, "wb") as file:
+            file.write(response.content)
+        print(f"Success! Image saved as: {filename}")
         
+        # Crop the bottom 15% of the image.
+        crop_bottom_15_percent(str(save_path))
+        
+        # Return a relative URL; we assume our Flask app serves images from '/images/'
+        return f"/images/{filename}"
     except requests.exceptions.RequestException as e:
-        print(f"\nError downloading image: {e}")
+        print(f"Error downloading image: {e}")
         return None
 
-if __name__ == "__main__":
-    while True:
-        output_image_path = download_image()
+def generate_images(prompt: str, num_images: int = 1) -> list:
+    """
+    Generates a list of image URLs (relative) by downloading the specified number of images
+    based on the given prompt.
+    
+    Args:
+        prompt (str): The image generation prompt.
+        num_images (int): The number of images to generate.
         
-        if output_image_path:
-            print(f"Image with bottom 15% cropped saved as: {output_image_path}")
-        
-        # Ask if user wants to generate another image
-        again = input("\nWould you like to generate another image? (yes/no): ").lower()
-        if again != 'yes' and again != 'y':
-            print("Thank you for using the image generator!")
-            break
+    Returns:
+        list: A list of relative URLs (e.g., ["/images/image_timestamp.jpg", ...]).
+    """
+    save_dir = "data/generate_images"
+    image_urls = []
+    for i in range(num_images):
+        print(f"Generating image {i+1} of {num_images}...")
+        url = download_image(prompt, save_dir)
+        if url:
+            image_urls.append(url)
+    return image_urls
 
-'''
-from diffusers import StableDiffusionPipeline
-import torch
-
-# Load the pipeline for CPU execution
-pipe = StableDiffusionPipeline.from_pretrained(
-    "stabilityai/sd-turbo", 
-    torch_dtype=torch.float32  # Ensure compatibility with CPU
-).to("cpu")
-
-def generate_image(prompt, save_path="C:\\Users\\Souma Chakraborty\\OneDrive\\Documents\\GitHub\\Story-Telling\\storytelling-ai\\data\\generate_images\\image1.png"):
-
-    image = pipe(prompt).images[0]  
-    image.save(save_path)  
-    return save_path
-
-
-story_prompt = "A medieval warrior standing on a hill at sunset."
-image_path = generate_image(story_prompt)
-print(f"Image saved at {image_path}")
-'''
+# Remove any interactive main block so this module is solely used as an API.
