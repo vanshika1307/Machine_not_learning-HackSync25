@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@fontsource dancing-script;
 :root {
   --primary-bg: #2d294e;
   --dark-bg: #0d0d0d;
