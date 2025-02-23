@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Typography, useTheme, Container, Grid, Link, Box, IconButton } from '@mui/material';
+import { Typography, useTheme, Container, Grid, Link, Box, IconButton, Divider } from '@mui/material';
 import { Facebook, Twitter, Instagram, LinkedIn } from '@mui/icons-material';
 
 const Footer = () => {
@@ -26,68 +26,81 @@ const Footer = () => {
       animate="visible"
       variants={footerVariants}
       style={{
-        background: `linear-gradient(135deg, #1E3A8A, #1E40AF)`, // Deep blue gradient
+        background: `linear-gradient(135deg, #0f172a, #1e293b)`, // Deep navy gradient
         color: '#ffffff',
-        padding: '2rem 0',
-        borderTop: `4px solid #1E3A8A`, 
-        fontFamily: `'Merriweather', serif`, // Elegant novel-like font
+        padding: '3rem 0',
+        borderTop: `4px solid #1E40AF`,
+        fontFamily: `'Poppins', sans-serif`,
       }}
     >
       <Container maxWidth="lg">
-        <Grid container spacing={4}>
-          {/* About Kahani AI */}
+        <Grid container spacing={6}>
+          {/* About Section */}
           <Grid item xs={12} sm={4}>
             <motion.div variants={itemVariants}>
-              <Typography variant="h6" gutterBottom style={{ fontWeight: 'bold', fontFamily: `'Playfair Display', serif` }}>
+              <Typography variant="h5" gutterBottom style={{ fontWeight: '600', fontFamily: `'Merriweather', serif`, color: '#93C5FD' }}>
                 About Kahani AI
               </Typography>
-              <Typography variant="body2" style={{ color: '#D1D5DB' }}>
-                Every story begins with a spark. Kahani AI helps writers bring their ideas to life, offering AI-powered assistance to refine narratives, generate plots, and enhance creativity. Let AI be your co-author in crafting the next masterpiece.
+              <Typography variant="body2" style={{ color: '#E5E7EB', lineHeight: 1.8 }}>
+                Every story begins with a spark. Kahani AI helps writers bring their ideas to life, offering AI-powered assistance to refine narratives, generate plots, and enhance creativity.
               </Typography>
             </motion.div>
           </Grid>
 
-          {/* Contact Us */}
+          {/* Contact Section */}
           <Grid item xs={12} sm={4}>
             <motion.div variants={itemVariants}>
-              <Typography variant="h6" gutterBottom style={{ fontWeight: 'bold', fontFamily: `'Playfair Display', serif` }}>
+              <Typography variant="h5" gutterBottom style={{ fontWeight: '600', fontFamily: `'Merriweather', serif`, color: '#93C5FD' }}>
                 Contact Us
               </Typography>
-              <Typography variant="body2" style={{ color: '#D1D5DB' }}>
+              <Typography variant="body2" style={{ color: '#E5E7EB', lineHeight: 1.8 }}>
                 221B Baker Street, London, Writers' Hub<br />
-                Email: <Link href="mailto:support@kahani.ai" style={{ color: '#93C5FD', textDecoration: 'none' }}>support@kahani.ai</Link><br />
-                Phone: <Link href="tel:+919876543210" style={{ color: '#93C5FD', textDecoration: 'none' }}>+91 98765 43210</Link>
+                Email: <Link href="mailto:support@kahani.ai" style={{ color: '#60A5FA', textDecoration: 'none', fontWeight: '500' }}>support@kahani.ai</Link><br />
+                Phone: <Link href="tel:+919876543210" style={{ color: '#60A5FA', textDecoration: 'none', fontWeight: '500' }}>+91 98765 43210</Link>
               </Typography>
             </motion.div>
           </Grid>
 
-          {/* Social Media Links */}
+          {/* Social Media Section */}
           <Grid item xs={12} sm={4}>
             <motion.div variants={itemVariants} style={{ textAlign: 'center' }}>
-              <Typography variant="h6" gutterBottom style={{ fontWeight: 'bold', fontFamily: `'Playfair Display', serif` }}>
+              <Typography variant="h5" gutterBottom style={{ fontWeight: '600', fontFamily: `'Merriweather', serif`, color: '#93C5FD' }}>
                 Connect With Us
               </Typography>
               <Box display="flex" justifyContent="center" gap={2}>
-                <IconButton href="https://facebook.com/kahaniAI" target="_blank" style={{ color: '#93C5FD' }}>
-                  <Facebook fontSize="large" />
-                </IconButton>
-                <IconButton href="https://twitter.com/kahaniAI" target="_blank" style={{ color: '#93C5FD' }}>
-                  <Twitter fontSize="large" />
-                </IconButton>
-                <IconButton href="https://instagram.com/kahaniAI" target="_blank" style={{ color: '#93C5FD' }}>
-                  <Instagram fontSize="large" />
-                </IconButton>
-                <IconButton href="https://linkedin.com/company/kahaniAI" target="_blank" style={{ color: '#93C5FD' }}>
-                  <LinkedIn fontSize="large" />
-                </IconButton>
+                {[
+                  { icon: <Facebook fontSize="large" />, link: "https://facebook.com/kahaniAI" },
+                  { icon: <Twitter fontSize="large" />, link: "https://twitter.com/kahaniAI" },
+                  { icon: <Instagram fontSize="large" />, link: "https://instagram.com/kahaniAI" },
+                  { icon: <LinkedIn fontSize="large" />, link: "https://linkedin.com/company/kahaniAI" },
+                ].map((social, index) => (
+                  <IconButton
+                    key={index}
+                    href={social.link}
+                    target="_blank"
+                    style={{
+                      color: '#60A5FA',
+                      transition: '0.3s ease-in-out',
+                      background: 'rgba(255, 255, 255, 0.1)',
+                      borderRadius: '10px',
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.color = '#FFFFFF'}
+                    onMouseOut={(e) => e.currentTarget.style.color = '#60A5FA'}
+                  >
+                    {social.icon}
+                  </IconButton>
+                ))}
               </Box>
             </motion.div>
           </Grid>
         </Grid>
 
+        {/* Divider */}
+        <Divider style={{ background: '#374151', margin: '2rem 0' }} />
+
         {/* Copyright */}
-        <Box mt={5} textAlign="center">
-          <Typography variant="body2" style={{ color: '#D1D5DB', fontFamily: `'Merriweather', serif` }}>
+        <Box mt={3} textAlign="center">
+          <Typography variant="body2" style={{ color: '#9CA3AF', fontFamily: `'Merriweather', serif`, fontSize: '14px' }}>
             © {new Date().getFullYear()} Kahani AI. Where AI meets storytelling.
           </Typography>
         </Box>

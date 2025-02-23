@@ -4,6 +4,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, PhoneAuthProvider , RecaptchaVerifier } from 'firebase/auth';
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
     apiKey: "AIzaSyDjtulHJBlsD8sCH6X_mIltipNzurpeH_o",
@@ -21,5 +22,8 @@ const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 const analytics = getAnalytics(app);
 const db = getFirestore(app);
+export const storage = getStorage(app);
+
+
 
 export { auth, googleProvider, analytics, db, PhoneAuthProvider , RecaptchaVerifier };

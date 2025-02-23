@@ -10,10 +10,11 @@ import VolunteerMap from "./pages/VolunteerMap";
 import EventCalendar from "./pages/EventCalendar";
 import CommunityDashBoard from "./pages/CommunityDashboard";
 import EducationTraining from "./pages/EducationTraining";
-import DonationPage from "./pages/DonationPage";
+import ImageGeneratorPage from "./pages/ImageGeneratorPage";
 import Checkout from "./components/Checkout";
 import Dashboard from "./pages/Dashboard";
 import Register from "./pages/register";
+import Blog from "./pages/Blog";
 import Logi from "./pages/login";
 import VolunteerProfile from './pages/VolunteerProfile';
 import VolunteerSearchPage from './pages/VolunteerSearchPage';
@@ -21,6 +22,7 @@ import VolunteerSignUpForm from "./components/VolunteerSignUpForm";
 import VolunteerConfirmationPage from "./components/VolunteerConfirmationPage";
 import ImageGrid from "./components/AdventureSection/ImageGeneratorContent";
 import { auth } from './firebase/config';
+import StoryGenerator from "./Pages/StoryGenerator";
 
 console.log('App component rendering');
 
@@ -54,10 +56,11 @@ const App = () => {
               path="/donate" 
               element={
                 <ProtectedRoute>
-                  <DonationPage />
+                  <ImageGeneratorPage />
                 </ProtectedRoute>
               } 
             />
+            <Route path="/blog" element={<Blog />} />
             <Route path="/eventcalendar" element={<EventCalendar />} />
             <Route path="/comdash" element={<CommunityDashBoard />} />
             <Route path="/edu" element={<EducationTraining />} />
@@ -70,6 +73,7 @@ const App = () => {
             <Route path='/volsignup' element={<VolunteerSignUpForm />} />
             <Route path='/confirmation' element={<VolunteerConfirmationPage />} />
             <Route path="/image-grid" element={<ImageGrid />} />
+            <Route path="/story" element={<StoryGenerator />} />
           </Routes>
           <Footer />
         </BrowserRouter>
