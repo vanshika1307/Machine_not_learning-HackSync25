@@ -1,8 +1,38 @@
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../firebase/config';
 import AdventureSection from "../components/AdventureSection";
+import Preloader from "../Components/Preloader/preloader";
+
+console.log('Home component rendering');
 
 const Home = () => {
+    const [loading, setLoading] = useState(true);
+  
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 1800); // Increased to 5 seconds for complete loading
+  
+      return () => clearTimeout(timer);
+    }, []);
+  
+    if (loading) {
+      return <Preloader />;
+    }
+  const navigate = useNavigate();
+  const [user] = useAuthState(auth);
+
+  const handleNavigate = (path) => {
+    if (user) {
+      navigate(path);
+    } else {
+      navigate('/login');
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col justify-between bg-[#0a0b1d]">
       {/* Hero Section */}
@@ -28,25 +58,25 @@ const Home = () => {
           </p>
 
           <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
-            <Link
-              to="/generate-images"
+            <button
+              onClick={() => handleNavigate('/donate')}
               className="bg-gradient-to-r from-blue-900 to-blue-700 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:scale-105 transition transform duration-300"
             >
               Generate Images
-            </Link>
-            <Link
-              to="/create-stories"
+            </button>
+            <button
+              onClick={() => handleNavigate('/map')}
               className="bg-gradient-to-r from-blue-900 to-blue-700 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:scale-105 transition transform duration-300"
             >
               Create Stories
-            </Link>
+            </button>
           </div>
         </motion.div>
       </div>
 
       <AdventureSection />
-        </div>
-       );
+    </div>
+  );
 };
 
 export default Home;

@@ -14,4 +14,9 @@
   --hover-bg: #3c385f;
   --gradient-start: #ff7e5f;
   --gradient-end: #feb47b;
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
 }

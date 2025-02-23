@@ -101,8 +101,19 @@ def update_characters_with_traits(traits, context):
     For each extracted character trait (entity), update the character details
     using the current story context.
     """
-    for trait in traits:
-        auto_update_character(trait, context)
+    for name in traits:
+        # Generate a more detailed character profile
+        prompt = (
+            f"Provide a detailed description of the character '{name}' including their personality traits, "
+            f"motivations, strengths, weaknesses, and unique behaviors. Also, describe their backstory, "
+            f"such as their first appearance in the story, key moments, relationships, and possible last appearance. "
+            f"Story context:\n\n{context}\n\nCharacter Details:"
+        )
+        detailed_traits = generate_idea(prompt, max_length=600).strip()
+        
+        # Store the extracted details in the character manager
+        auto_update_character(name, detailed_traits)
+
 
 def run_pipeline(initial_prompt, story_id=None, title=None):
     # Optionally update story metadata if needed.
