@@ -61,19 +61,19 @@ const Header = () => {
           </div>
 
           <div className="hidden md:flex items-center space-x-8">
-            <NavLink to="/pricing" isActive={location.pathname === "/pricing"}>Pricing</NavLink>
-            <NavLink to="/blog" isActive={location.pathname === "/blog"}>Blog</NavLink>
-            <NavLink to="/discord" isActive={location.pathname === "/discord"}>Discord</NavLink>
-            {user ? (
-              <button
-                onClick={() => auth.signOut()}
-                className="text-white hover:text-yellow-400 transition duration-300"
-              >
-                Logout
-              </button>
-            ) : (
-              <NavLink to="/login" isActive={location.pathname === "/login"}>Login</NavLink>
-            )}
+  <NavLink to="/text-editor" isActive={location.pathname === "/text-editor"}>Text Editor</NavLink>
+  <NavLink to="/blog" isActive={location.pathname === "/blog"}>Blog</NavLink>
+  <NavLink to="/discord" isActive={location.pathname === "/discord"}>Discord</NavLink>
+  {user ? (
+    <button
+      onClick={() => auth.signOut()}
+      className="text-white hover:text-yellow-400 transition duration-300"
+    >
+      Logout
+    </button>
+  ) : (
+    <NavLink to="/login" isActive={location.pathname === "/login"}>Login</NavLink>
+  )}
             <div className="flex items-center gap-3">
               {!isPlaying && (
                 <span className="text-gray-400 text-sm font-medium italic">wanna hear some music?</span>

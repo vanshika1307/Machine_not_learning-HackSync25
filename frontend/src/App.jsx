@@ -6,6 +6,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
+import TextEditor from "./pages/TextEditor";
 import VolunteerMap from "./pages/VolunteerMap";
 import EventCalendar from "./pages/EventCalendar";
 import CommunityDashBoard from "./pages/CommunityDashboard";
@@ -61,6 +62,7 @@ const App = () => {
                 </ProtectedRoute>
               } 
             />
+              <Route path="/text-editor" element={<TextEditor />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/eventcalendar" element={<EventCalendar />} />
             <Route path="/comdash" element={<CommunityDashBoard />} />
