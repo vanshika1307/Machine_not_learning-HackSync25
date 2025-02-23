@@ -10,7 +10,7 @@ import VolunteerMap from "./pages/VolunteerMap";
 import EventCalendar from "./pages/EventCalendar";
 import CommunityDashBoard from "./pages/CommunityDashboard";
 import EducationTraining from "./pages/EducationTraining";
-import DonationPage from "./pages/DonationPage";
+import ImageGeneratorPage from "./pages/ImageGeneratorPage";
 import Checkout from "./components/Checkout";
 import Dashboard from "./pages/Dashboard";
 import Register from "./pages/register";
@@ -56,7 +56,7 @@ const App = () => {
               path="/donate" 
               element={
                 <ProtectedRoute>
-                  <DonationPage />
+                  <ImageGeneratorPage />
                 </ProtectedRoute>
               } 
             />
