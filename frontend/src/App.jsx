@@ -23,6 +23,7 @@ import VolunteerConfirmationPage from "./components/VolunteerConfirmationPage";
 import ImageGrid from "./components/AdventureSection/ImageGeneratorContent";
 import { auth } from './firebase/config';
 import StoryGenerator from "./Pages/StoryGenerator";
+import StoryFeedback from "./Pages/Feedback";
 
 console.log('App component rendering');
 
@@ -74,6 +75,7 @@ const App = () => {
             <Route path='/confirmation' element={<VolunteerConfirmationPage />} />
             <Route path="/image-grid" element={<ImageGrid />} />
             <Route path="/story" element={<StoryGenerator />} />
+            <Route path="/feedback" element={<StoryFeedback />} />
           </Routes>
           <Footer />
         </BrowserRouter>

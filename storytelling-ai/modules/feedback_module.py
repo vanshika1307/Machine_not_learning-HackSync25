@@ -7,7 +7,11 @@ analyzing tone using a sentiment analysis pipeline, and generating a title and p
 
 import language_tool_python
 from transformers import pipeline
-from modules.idea_generator import generate_idea
+
+try:
+    from modules.idea_generator import generate_idea
+except ModuleNotFoundError:
+    from idea_generator import generate_idea  # Use relative import if needed
 
 # Initialize LanguageTool for US English.
 tool = language_tool_python.LanguageTool('en-US')
@@ -19,67 +23,63 @@ sentiment_pipeline = pipeline(
 )
 
 def grammar_feedback(text: str) -> list:
+    """Checks grammar and spelling using LanguageTool."""
     matches = tool.check(text)
     corrections = [
-        f"{match.ruleId}: {match.replacements[0]}" if match.replacements else match.message
+        f"- {match.ruleId}: {match.replacements[0]}" if match.replacements else f"- {match.message}"
         for match in matches
     ]
     return corrections
 
-def tone_check(text: str) -> list:
-    sentiment = sentiment_pipeline(text)
-    return sentiment
+def tone_check(text: str) -> str:
+    """Analyzes the sentiment of the text and returns a readable output."""
+    sentiment = sentiment_pipeline(text)[0]
+    return f"{sentiment['label']} (Confidence: {sentiment['score']:.2%})"
 
 def suggest_title(text: str) -> str:
-    prompt = (
-        f"Based on the following story, suggest a concise, creative title:\n\n{text}\n\nTitle:"
-    )
-    title = generate_idea(prompt, max_length=900).strip()
-    return title
+    """Generates a concise, creative title for the story."""
+    prompt = f"Based on the following story, suggest a concise, creative title:\n\n{text}\n\nTitle:"
+    return generate_idea(prompt, max_length=900).strip()
 
 def suggest_twists(text: str) -> str:
-    prompt = (
-        f"Based on the following story, suggest three surprising and unique plot twists:\n\n{text}\n\nPlot Twists:"
-    )
-    twists = generate_idea(prompt, max_length=800).strip()
-    return twists
+    """Generates three unique and surprising plot twists for the story."""
+    prompt = f"Based on the following story, suggest three surprising and unique plot twists:\n\n{text}\n\nPlot Twists:"
+    return generate_idea(prompt, max_length=800).strip()
 
-def feedback(text: str) -> dict:
-    return {
-        "grammar_issues": grammar_feedback(text),
-        "tone": tone_check(text),
-        "title": suggest_title(text),
-        "plot_twists": suggest_twists(text)
-    }
-
-'''
-import language_tool_python
-from transformers import pipeline
-
-# Initialize LanguageTool for grammar checking
-tool = language_tool_python.LanguageTool('en-US')
-
-# Initialize a sentiment analysis pipeline (BERT-based)
-from transformers import pipeline
-
-# Specify the model explicitly:
-sentiment_pipeline = pipeline(
-    "sentiment-analysis", 
-    model="distilbert-base-uncased-finetuned-sst-2-english"
-)
-#sentiment_pipeline = pipeline("sentiment-analysis")
-
-def grammar_feedback(text):
-    matches = tool.check(text)
-    corrections = [f"{match.ruleId}: {match.replacements[0]}" if match.replacements else match.message for match in matches]
-    return corrections
-
-def tone_check(text):
-    sentiment = sentiment_pipeline(text)
-    return sentiment
-
-def feedback(text):
+def feedback(text: str):
+    """Generates and prints feedback including grammar issues, tone analysis, a title, and plot twists."""
+    
+    print("\n📝 **Grammar Issues:**")
     grammar_issues = grammar_feedback(text)
-    tone = tone_check(text)
-    return {"grammar_issues": grammar_issues, "tone": tone}
-'''
+    if grammar_issues:
+        print("\n".join(grammar_issues))
+    else:
+        print("✅ No major grammar issues found!")
+
+    print("\n🎭 **Tone Analysis:**")
+    print(f"- {tone_check(text)}")
+
+    print("\n📖 **Suggested Title:**")
+    print(f"- {suggest_title(text)}")
+
+    print("\n🔀 **Plot Twist Ideas:**")
+    print(suggest_twists(text))
+
+# ✅ Run this script directly to test with user input
+if __name__ == "__main__":
+    print("\n🔍 Paste your story below and press Enter (type 'END' on a new line to finish):\n")
+    user_story = []
+    
+    while True:
+        line = input()
+        if line.strip().upper() == "END":
+            break
+        user_story.append(line)
+
+    user_story = "\n".join(user_story).strip()
+
+    if not user_story:
+        print("❌ No story provided. Exiting...")
+    else:
+        print("\n🔎 **Generating feedback...**\n")
+        feedback(user_story)
