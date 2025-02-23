@@ -7,6 +7,7 @@ nltk
 numpy
 pandas
 diffusers
+opencv-python
 ###python -m spacy download en_core_web_sm
 
 # Install NLTK data (optional, for future adjective extraction)
