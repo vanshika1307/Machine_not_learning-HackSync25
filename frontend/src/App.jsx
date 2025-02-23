@@ -6,14 +6,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
-<<<<<<< HEAD
 import TextEditor from "./pages/TextEditor";
-import VolunteerMap from "./pages/VolunteerMap";
-import EventCalendar from "./pages/EventCalendar";
-import CommunityDashBoard from "./pages/CommunityDashboard";
-import EducationTraining from "./pages/EducationTraining";
-=======
->>>>>>> d17b8c250fb370ca0455de2ab3acd539620e46ff
 import ImageGeneratorPage from "./pages/ImageGeneratorPage";
 import Register from "./pages/register";
 import Blog from "./pages/Blog";
