@@ -19,7 +19,7 @@ import VolunteerProfile from './pages/VolunteerProfile';
 import VolunteerSearchPage from './pages/VolunteerSearchPage'
 import VolunteerSignUpForm from "./components/VolunteerSignUpForm";
 import VolunteerConfirmationPage from "./components/VolunteerConfirmationPage";
-import ImageGenerate from "./pages/ImageGenerate";
+import ImageGrid from "./components/AdventureSection/ImageGeneratorContent";
 
 const App = () => {
   return (
@@ -52,7 +52,7 @@ const App = () => {
             <Route path='/Profile' element={<VolunteerProfile />} />
             <Route path='/volsignup' element={<VolunteerSignUpForm />} />
             <Route path='/confirmation' element={<VolunteerConfirmationPage />} />
-            <Route path="/generate-images" element={<ImageGenerate />} /> 
+            <Route path="/image-grid" element={<ImageGrid />} />
 
           </Routes>
           <Footer />
