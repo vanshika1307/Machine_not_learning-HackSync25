@@ -11,6 +11,8 @@ import ImageGeneratorPage from "./pages/ImageGeneratorPage";
 import Register from "./pages/register";
 import Blog from "./pages/Blog";
 import Logi from "./pages/login";
+import ContactUs from "./pages/ContactUs";
+
 import ImageGrid from "./components/AdventureSection/ImageGeneratorContent";
 import { auth } from './firebase/config';
 import StoryGenerator from "./Pages/StoryGenerator";
@@ -36,6 +38,14 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
+            <Route
+              path="/contact-us"
+              element={
+                <ProtectedRoute>
+                  <ContactUs />
+                </ProtectedRoute>
+              }
+            />
             <Route 
               path="/image-generator" 
               element={

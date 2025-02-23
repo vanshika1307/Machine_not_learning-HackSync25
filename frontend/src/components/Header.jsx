@@ -63,7 +63,7 @@ const Header = () => {
           <div className="hidden md:flex items-center space-x-8">
   <NavLink to="/text-editor" isActive={location.pathname === "/text-editor"}>Text Editor</NavLink>
   <NavLink to="/blog" isActive={location.pathname === "/blog"}>Blog</NavLink>
-  <NavLink to="/discord" isActive={location.pathname === "/discord"}>Discord</NavLink>
+  <NavLink to="/contact-us" isActive={location.pathname === "/contact-us"}>ContactUs</NavLink>
   {user ? (
     <button
       onClick={() => auth.signOut()}
