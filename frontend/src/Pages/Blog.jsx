@@ -1,10 +1,99 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { collection, query, orderBy, getDocs, addDoc, serverTimestamp, updateDoc, doc, where, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase/config';
-import { Sparkles, Clock, Heart, MessageCircle, Search } from 'lucide-react';
+import { Sparkles, Clock, Heart, MessageCircle, Search, X, Share2 } from 'lucide-react';
+
+// Modal Component for Full Blog Post
+const BlogModal = ({ post, onClose }) => {
+  if (!post) return null;
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+        onClick={onClose}
+      >
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.9, opacity: 0 }}
+          className="bg-gray-900 rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto"
+          onClick={e => e.stopPropagation()}
+        >
+          {/* Modal Header */}
+          <div className="sticky top-0 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 p-4 flex justify-between items-center">
+            <h2 className="text-xl font-bold text-white">{post.title}</h2>
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-gray-800 rounded-full transition-colors"
+            >
+              <X className="w-6 h-6 text-gray-400" />
+            </button>
+          </div>
+
+          {/* Modal Content */}
+          <div className="p-6">
+            {post.imageUrl && (
+              <div className="aspect-video w-full overflow-hidden rounded-lg mb-6">
+                <img
+                  src={post.imageUrl}
+                  alt={post.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
+
+            {/* Author Info */}
+            <div className="flex items-center space-x-4 mb-6">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
+                <span className="text-white font-bold">
+                  {post.author?.[0]?.toUpperCase() || 'A'}
+                </span>
+              </div>
+              <div>
+                <p className="text-white font-medium">{post.author}</p>
+                <p className="text-sm text-gray-400">
+                  {post.createdAt?.toDate().toLocaleDateString()}
+                </p>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="prose prose-invert max-w-none">
+              <p className="text-gray-300 leading-relaxed whitespace-pre-wrap">
+                {post.content}
+              </p>
+            </div>
+
+            {/* Footer */}
+            <div className="mt-8 pt-6 border-t border-gray-800 flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <button className="flex items-center space-x-2 text-gray-400 hover:text-red-500 transition-colors">
+                  <Heart className={`w-5 h-5 ${post.isLiked ? 'fill-current text-red-500' : ''}`} />
+                  <span>{post.likes || 0}</span>
+                </button>
+                <button className="flex items-center space-x-2 text-gray-400 hover:text-yellow-400 transition-colors">
+                  <MessageCircle className="w-5 h-5" />
+                  <span>{post.comments?.length || 0}</span>
+                </button>
+              </div>
+              <button className="flex items-center space-x-2 text-gray-400 hover:text-blue-400 transition-colors">
+                <Share2 className="w-5 h-5" />
+                <span>Share</span>
+              </button>
+            </div>
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+};
 
 const Blog = () => {
   const [posts, setPosts] = useState([]);
@@ -15,7 +104,8 @@ const Blog = () => {
   const [sortBy, setSortBy] = useState('newest');
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredPosts, setFilteredPosts] = useState([]);
-
+  const [selectedPost, setSelectedPost] = useState(null);
+  const maxPreviewLength = 150;
   // Cloudinary credentials
   const CLOUDINARY_UPLOAD_PRESET = 'KahaniAI';
   const CLOUDINARY_CLOUD_NAME = 'dqsixqhky';
@@ -213,6 +303,10 @@ const Blog = () => {
       setLoading(false);
     }
   };
+  const truncateContent = (content) => {
+    if (content.length <= maxPreviewLength) return content;
+    return content.substring(0, maxPreviewLength) + '...';
+  };
 
   return (
     <div className="min-h-screen bg-[#0a0b1d] py-20 px-4 sm:px-6 lg:px-8">
@@ -336,7 +430,10 @@ const Blog = () => {
             className="bg-gray-900/30 rounded-xl overflow-hidden border border-gray-800 hover:border-yellow-400/50 transition duration-300"
           >
             {post.imageUrl && (
-              <div className="aspect-video w-full overflow-hidden">
+              <div 
+                className="aspect-video w-full overflow-hidden cursor-pointer"
+                onClick={() => setSelectedPost(post)}
+              >
                 <img
                   src={post.imageUrl}
                   alt={post.title}
@@ -345,8 +442,23 @@ const Blog = () => {
               </div>
             )}
             <div className="p-6">
-              <h2 className="text-xl font-bold text-white mb-3">{post.title}</h2>
-              <p className="text-gray-400 mb-4">{post.content}</p>
+              <h2 
+                className="text-xl font-bold text-white mb-3 cursor-pointer hover:text-yellow-400 transition-colors"
+                onClick={() => setSelectedPost(post)}
+              >
+                {post.title}
+              </h2>
+              <div className="text-gray-400 mb-4">
+                <p>{truncateContent(post.content)}</p>
+                {post.content.length > maxPreviewLength && (
+                  <button
+                    onClick={() => setSelectedPost(post)}
+                    className="text-yellow-400 hover:text-yellow-300 mt-2 font-medium transition-colors"
+                  >
+                    Read More
+                  </button>
+                )}
+              </div>
               <div className="flex items-center justify-between text-sm text-gray-500">
                 <div className="flex items-center space-x-2">
                   <Clock className="w-4 h-4" />
@@ -374,6 +486,14 @@ const Blog = () => {
           </motion.article>
         ))}
       </div>
+
+      {/* Blog Post Modal */}
+      {selectedPost && (
+        <BlogModal
+          post={selectedPost}
+          onClose={() => setSelectedPost(null)}
+        />
+      )}
     </div>
   );
 };
