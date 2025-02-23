@@ -58,7 +58,7 @@ def auto_update_character(name: str, context: str) -> str:
         f"Focus on distinct traits and avoid generic, repetitive descriptions. Here is the story context:\n\n"
         f"{context}\n\nDetails:"
     )
-    new_details = generate_idea(prompt, max_length=400).strip()
+    new_details = generate_idea(prompt, max_length=2000).strip()
     
     char_info = get_character(name)
     if char_info:
