@@ -14,6 +14,8 @@ import DonationPage from "./pages/DonationPage";
 import Checkout from "./components/Checkout";
 import Dashboard from "./pages/Dashboard";
 import Register from "./pages/register";
+import Blog from "./pages/Blog";
+
 import Logi from "./pages/login";
 import VolunteerProfile from './pages/VolunteerProfile';
 import VolunteerSearchPage from './pages/VolunteerSearchPage';
@@ -58,6 +60,7 @@ const App = () => {
                 </ProtectedRoute>
               } 
             />
+            <Route path="/blog" element={<Blog />} />
             <Route path="/eventcalendar" element={<EventCalendar />} />
             <Route path="/comdash" element={<CommunityDashBoard />} />
             <Route path="/edu" element={<EducationTraining />} />
