@@ -9,22 +9,19 @@ import Preloader from "../Components/Preloader/preloader";
 console.log('Home component rendering');
 
 const Home = () => {
-    const [loading, setLoading] = useState(true);
-  
-    useEffect(() => {
-      const timer = setTimeout(() => {
-        setLoading(false);
-      }, 1800); // Increased to 5 seconds for complete loading
-  
-      return () => clearTimeout(timer);
-    }, []);
-  
-    if (loading) {
-      return <Preloader />;
-    }
+  // All hooks at the top level
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [user] = useAuthState(auth);
-
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 5000); // 5 seconds for loading
+  
+    return () => clearTimeout(timer);
+  }, []);
+  
   const handleNavigate = (path) => {
     if (user) {
       navigate(path);
@@ -32,6 +29,10 @@ const Home = () => {
       navigate('/login');
     }
   };
+
+  if (loading) {
+    return <Preloader />;
+  }
 
   return (
     <div className="min-h-screen flex flex-col justify-between bg-[#0a0b1d]">
