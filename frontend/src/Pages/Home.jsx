@@ -9,18 +9,33 @@ import Preloader from "../Components/Preloader/preloader";
 console.log('Home component rendering');
 
 const Home = () => {
+<<<<<<< HEAD
   // All hooks at the top level
+=======
+  // Initialize loading state to true on every mount/refresh
+>>>>>>> a7c68320c834c0cb746a9c0d6774dc01cc86bc5f
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [user] = useAuthState(auth);
   
   useEffect(() => {
+<<<<<<< HEAD
     const timer = setTimeout(() => {
       setLoading(false);
     }, 5000); // 5 seconds for loading
   
     return () => clearTimeout(timer);
   }, []);
+=======
+    if (loading) {
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 1700);
+  
+      return () => clearTimeout(timer);
+    }
+  }, [loading]);
+>>>>>>> a7c68320c834c0cb746a9c0d6774dc01cc86bc5f
   
   const handleNavigate = (path) => {
     if (user) {
@@ -55,7 +70,7 @@ const Home = () => {
           </h1>
           <p className="text-lg md:text-2xl mt-4 text-gray-300">
             Between a helpful co-writer and an easy-to-use image generator,
-            <br /> NovelAI offers the tools to unlock your creative potential.
+            <br /> Kahani AI offers the tools to unlock your creative potential.
           </p>
 
           <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">

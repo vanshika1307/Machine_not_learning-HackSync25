@@ -1,26 +1,8 @@
 """
 idea_generator.py
 
-Generates a story idea or prompt using a distilled GPT‑2 model (distilgpt2).
+Generates a story idea or prompt using a fine-tuned GPT-2 model.
 """
-"""
-idea_generator.py
-
-Generates a story idea or prompt using a distilled GPT‑2 model (distilgpt2).
-"""
-
-"""
-idea_generator.py
-
-Generates a story idea or prompt using a distilled GPT‑2 model (distilgpt2).
-"""
-
-"""
-idea_generator.py
-
-Generates a story idea or prompt using a distilled GPT‑2 model (distilgpt2).
-"""
-
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
 import torch
 

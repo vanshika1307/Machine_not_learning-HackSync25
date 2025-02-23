@@ -26,7 +26,7 @@ def crop_bottom_15_percent(image_path):
 # Function to download image
 def download_image():
     # Define the save directory
-    save_dir = Path("storytelling-ai\\data\\generate_images")
+    save_dir = Path("C:\\Users\\Souma Chakraborty\\OneDrive\\Documents\\GitHub\\Story-Telling\\storytelling-ai\\data\\generate_images")
     
     # Create directory if it doesn't exist
     save_dir.mkdir(parents=True, exist_ok=True)
