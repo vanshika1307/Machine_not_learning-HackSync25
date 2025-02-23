@@ -1,2 +1,6 @@
 mlenv/
 venv/
+test.txt
+train.txt
+valid.txt
+cached_lm_GPT2Tokenizer_128_train.txt.lock
