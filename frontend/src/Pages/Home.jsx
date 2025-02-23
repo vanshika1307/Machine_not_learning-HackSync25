@@ -17,7 +17,7 @@ const Home = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 5000); // 5 seconds for loading
+    }, 1000); // 5 seconds for loading
   
     return () => clearTimeout(timer);
   }, []);
@@ -60,16 +60,22 @@ const Home = () => {
 
           <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
             <button
-              onClick={() => handleNavigate('/donate')}
+              onClick={() => handleNavigate('/generate-images')}
               className="bg-gradient-to-r from-blue-900 to-blue-700 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:scale-105 transition transform duration-300"
             >
               Generate Images
             </button>
             <button
-              onClick={() => handleNavigate('/map')}
+              onClick={() => handleNavigate('/story-generator')}
               className="bg-gradient-to-r from-blue-900 to-blue-700 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:scale-105 transition transform duration-300"
             >
               Create Stories
+            </button>
+            <button
+              onClick={() => handleNavigate('/feedback')}
+              className="bg-gradient-to-r from-blue-900 to-blue-700 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:scale-105 transition transform duration-300"
+            >
+              Enhance Stories
             </button>
           </div>
         </motion.div>
