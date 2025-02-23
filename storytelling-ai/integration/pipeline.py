@@ -4,7 +4,7 @@ import os
 import sys
 
 # Ensure the project root is in sys.path
-current_dir = os.path.dirname(os.path.abspath(__file__))
+current_dir = os.path.dirname(os.path.abspath(_file_))
 parent_dir = os.path.join(current_dir, "..")
 if parent_dir not in sys.path:
     sys.path.append(parent_dir)
@@ -88,7 +88,7 @@ def run_pipeline(
         
         
 
-if __name__ == "__main__":
+if _name_ == "_main_":
     # Example: prompt for story metadata at runtime
     story_id = input("Enter story ID: ")
     title = input("Enter story title: ")
