@@ -15,7 +15,6 @@ import Checkout from "./components/Checkout";
 import Dashboard from "./pages/Dashboard";
 import Register from "./pages/register";
 import Blog from "./pages/Blog";
-
 import Logi from "./pages/login";
 import VolunteerProfile from './pages/VolunteerProfile';
 import VolunteerSearchPage from './pages/VolunteerSearchPage';
@@ -23,6 +22,7 @@ import VolunteerSignUpForm from "./components/VolunteerSignUpForm";
 import VolunteerConfirmationPage from "./components/VolunteerConfirmationPage";
 import ImageGrid from "./components/AdventureSection/ImageGeneratorContent";
 import { auth } from './firebase/config';
+import StoryGenerator from "./Pages/StoryGenerator";
 
 console.log('App component rendering');
 
@@ -73,6 +73,7 @@ const App = () => {
             <Route path='/volsignup' element={<VolunteerSignUpForm />} />
             <Route path='/confirmation' element={<VolunteerConfirmationPage />} />
             <Route path="/image-grid" element={<ImageGrid />} />
+            <Route path="/story" element={<StoryGenerator />} />
           </Routes>
           <Footer />
         </BrowserRouter>
