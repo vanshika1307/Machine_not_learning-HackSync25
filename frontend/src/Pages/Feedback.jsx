@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FileText, Type, Check, Settings2, Upload, Send, RotateCcw } from "lucide-react";
+import { FileText, Type, Check, Upload, RotateCcw } from "lucide-react";
 import { Alert as MuiAlert } from "@mui/material";
 import { motion } from "framer-motion";
 
@@ -9,13 +9,12 @@ const analysisTypes = [
   { name: "Style", icon: "✨", color: "from-purple-500 to-pink-500" },
   { name: "Structure", icon: "🏗️", color: "from-orange-500 to-red-500" },
   { name: "Coherence", icon: "🔄", color: "from-cyan-500 to-blue-500" },
-  { name: "Engagement", icon: "🎯", color: "from-yellow-500 to-orange-500" }
+  { name: "Engagement", icon: "🎯", color: "from-yellow-500 to-orange-500" },
 ];
 
 const StoryFeedback = () => {
   const [text, setText] = useState("");
   const [file, setFile] = useState(null);
-  const [selectedAnalysis, setSelectedAnalysis] = useState([]);
   const [feedback, setFeedback] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -24,7 +23,6 @@ const StoryFeedback = () => {
     const uploadedFile = event.target.files[0];
     if (uploadedFile) {
       setFile(uploadedFile);
-      // Read file content
       const reader = new FileReader();
       reader.onload = (e) => setText(e.target.result);
       reader.readAsText(uploadedFile);
@@ -32,23 +30,26 @@ const StoryFeedback = () => {
   };
 
   const handleAnalyze = async () => {
-    if (!text.trim() || selectedAnalysis.length === 0) {
+    if (!text.trim()) {
       setShowAlert(true);
       return;
     }
     setIsAnalyzing(true);
-    // Simulate API call
-    setTimeout(() => {
-      setFeedback({
-        summary: "Story analysis complete! Here's what we found...",
-        details: [
-          { type: "Grammar", score: 85, suggestions: ["Consider revising punctuation"] },
-          { type: "Tone", score: 90, suggestions: ["Consistent tone throughout"] },
-          { type: "Style", score: 88, suggestions: ["Good use of descriptive language"] }
-        ]
+    try {
+      const response = await fetch("http://127.0.0.1:5002/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
       });
-      setIsAnalyzing(false);
-    }, 2000);
+      if (!response.ok) {
+        throw new Error("Failed to analyze the story.");
+      }
+      const data = await response.json();
+      setFeedback(data);
+    } catch (error) {
+      console.error("Error fetching feedback:", error);
+    }
+    setIsAnalyzing(false);
   };
 
   return (
@@ -60,21 +61,23 @@ const StoryFeedback = () => {
           className="text-center space-y-4"
         >
           <h1 className="text-5xl font-bold text-white">Story Analyzer</h1>
-          <p className="text-gray-400 text-lg">Get professional feedback on your writing</p>
+          <p className="text-gray-400 text-lg">
+            Get professional feedback on your writing
+          </p>
         </motion.div>
 
         {showAlert && (
-          <MuiAlert 
-            severity="warning" 
+          <MuiAlert
+            severity="warning"
             onClose={() => setShowAlert(false)}
             sx={{ mb: 2 }}
           >
-            Please select at least one analysis type and provide text to analyze.
+            Please provide text to analyze.
           </MuiAlert>
         )}
 
-        {/* Analysis Types Selection */}
-        <motion.div 
+        {/* (Optional) Analysis Types Selection */}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
@@ -85,14 +88,7 @@ const StoryFeedback = () => {
               key={type.name}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => setSelectedAnalysis(prev => 
-                prev.includes(type.name) 
-                  ? prev.filter(t => t !== type.name)
-                  : [...prev, type.name]
-              )}
-              className={`p-4 rounded-xl bg-gradient-to-r ${type.color} 
-                ${selectedAnalysis.includes(type.name) ? 'ring-2 ring-white' : 'opacity-70'}
-                transition-all duration-300`}
+              className={`p-4 rounded-xl bg-gradient-to-r ${type.color} opacity-70 transition-all duration-300`}
             >
               <div className="text-2xl mb-2">{type.icon}</div>
               <div className="text-white font-medium">{type.name}</div>
@@ -101,7 +97,7 @@ const StoryFeedback = () => {
         </motion.div>
 
         {/* Text Input Section */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
@@ -134,7 +130,7 @@ const StoryFeedback = () => {
               <Type size={20} />
               <span>Or paste your text here</span>
             </div>
-            
+
             <textarea
               value={text}
               onChange={(e) => setText(e.target.value)}
@@ -179,7 +175,7 @@ const StoryFeedback = () => {
 
         {/* Feedback Results */}
         {feedback && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="bg-[#13142d] rounded-xl p-6 shadow-lg"
@@ -188,22 +184,32 @@ const StoryFeedback = () => {
               <FileText size={20} />
               <span>Analysis Results</span>
             </div>
-            <div className="space-y-6">
-              <p className="text-gray-300">{feedback.summary}</p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {feedback.details.map((detail, index) => (
-                  <div key={index} className="bg-[#1a1b3d] p-4 rounded-lg">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-white">{detail.type}</span>
-                      <span className="text-green-400">{detail.score}%</span>
-                    </div>
-                    <ul className="text-sm text-gray-400">
-                      {detail.suggestions.map((suggestion, i) => (
-                        <li key={i}>{suggestion}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
+            <div className="space-y-4">
+              <div className="text-white">
+                <strong>Suggested Title:</strong> {feedback.title}
+              </div>
+              <div className="text-white">
+                <strong>Tone Analysis:</strong> {feedback.tone}
+              </div>
+              <div className="text-white">
+                <strong>Plot Twist Ideas:</strong>
+                <p className="text-gray-300 whitespace-pre-wrap">
+                  {feedback.plot_twists}
+                </p>
+              </div>
+              <div>
+                <h4 className="text-white">Grammar Issues:</h4>
+                {feedback.grammar_issues.length > 0 ? (
+                  <ul className="text-gray-300 list-disc ml-6">
+                    {feedback.grammar_issues.map((issue, index) => (
+                      <li key={index}>{issue}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-green-400">
+                    No major grammar issues found!
+                  </p>
+                )}
               </div>
             </div>
           </motion.div>
