@@ -1,4 +1,4 @@
-# storytelling-ai/integration/app.py
+
 import os
 import sys
 
@@ -8,19 +8,22 @@ parent_dir = os.path.join(current_dir, "..")
 if parent_dir not in sys.path:
     sys.path.append(parent_dir)
 
-from flask import Flask, render_template, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, render_template_string
 from modules.image_generator import generate_images
-from pathlib import Path
-import os
 
 app = Flask(__name__)
 
-# Route to serve static images from the "data/generate_images" folder.
-@app.route("/images/<path:filename>")
+# Optional: a simple index route to verify the Flask backend.
+@app.route("/", methods=["GET"])
+def index():
+    return render_template_string("<h1>Flask API is running</h1><p>Use the /generate_images endpoint to generate images.</p>")
+
+# Serve generated images from "data/generate_images" via /donate/images/<filename>
+@app.route("/donate/images/<path:filename>")
 def serve_image(filename):
     return send_from_directory("data/generate_images", filename)
 
-# Endpoint for generating images.
+# Endpoint for generating images. (POST only)
 @app.route("/generate_images", methods=["POST"])
 def generate_images_endpoint():
     data = request.get_json()
@@ -36,10 +39,6 @@ def generate_images_endpoint():
     image_urls = generate_images(prompt, num_images)
     return jsonify({"image_paths": image_urls})
 
-# Optional: If you have an index.html template for testing.
-@app.route("/", methods=["GET"])
-def index():
-    return render_template("index.html")
-
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5001)
+

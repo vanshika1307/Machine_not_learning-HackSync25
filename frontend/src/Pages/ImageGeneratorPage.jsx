@@ -9,18 +9,28 @@ const ImageGeneratorPage = () => {
   const [loading, setLoading] = useState(false);
   const [generatedImages, setGeneratedImages] = useState([]);
 
-  // This is a placeholder function - replace with actual API call later
   const generateImages = async () => {
     if (!prompt) return;
     
     setLoading(true);
-    // Simulate API call with timeout
-    setTimeout(() => {
-      // Placeholder images - replace with actual API response
-      const images = Array(imageCount).fill('/api/placeholder/512/512');
-      setGeneratedImages(images);
+    try {
+      const response = await fetch('/generate_images', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt, num_images: imageCount }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to generate images');
+      }
+      
+      const data = await response.json();
+      setGeneratedImages(data.image_paths || []);
+    } catch (error) {
+      console.error('Error generating images:', error);
+    } finally {
       setLoading(false);
-    }, 2000);
+    }
   };
 
   const handleDownload = (imageUrl, index) => {
@@ -83,7 +93,7 @@ const ImageGeneratorPage = () => {
                 onChange={(e) => setImageCount(Number(e.target.value))}
                 className="w-full bg-gray-800 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-400"
               >
-                {[1, 2, 3, 4].map(num => (
+                {[1, 2, 3].map(num => (
                   <option key={num} value={num}>{num}</option>
                 ))}
               </select>

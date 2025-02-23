@@ -1,42 +1,17 @@
-import { defineConfig, transformWithEsbuild } from 'vite'
+import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    {
-      name: 'treat-js-files-as-jsx',
-      async transform(code, id) {
-        if (!id.match(/src\/.*\.js$/))  return null
-
-        // Use the exposed transform from vite, instead of directly
-        // transforming with esbuild
-        return transformWithEsbuild(code, id, {
-          loader: 'jsx',
-          jsx: 'automatic',
-        })
-      },
-    },
-    react(),
-  ],
-
-  optimizeDeps: {
-    force: true,
-    esbuildOptions: {
-      loader: {
-        '.js': 'jsx',
-      },
-    },
-  },
+  plugins: [react()],
   server: {
     proxy: {
       '/generate_images': {
-        target: 'http://localhost:5000',
+        target: 'http://localhost:5001',
         changeOrigin: true,
         secure: false,
       },
-      '/images': {
-        target: 'http://localhost:5000',
+      '/donate/images': {
+        target: 'http://localhost:5001',
         changeOrigin: true,
         secure: false,
       },

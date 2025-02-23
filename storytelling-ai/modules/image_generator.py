@@ -1,4 +1,4 @@
-# storytelling-ai/modules/image_generator.py
+
 
 import requests
 import os
@@ -24,6 +24,7 @@ def download_image(prompt: str, save_dir: str) -> str:
     """
     Downloads an image from pollinations.ai based on the prompt,
     crops the bottom 15% of the image, and returns a relative URL.
+    The image is saved in PNG format.
     """
     # Ensure the directory exists.
     save_dir = Path(save_dir)
@@ -31,7 +32,7 @@ def download_image(prompt: str, save_dir: str) -> str:
     
     # Create a unique filename using a timestamp.
     timestamp = time.strftime("%Y%m%d_%H%M%S")
-    filename = f"image_{timestamp}.jpg"
+    filename = f"image_{timestamp}.png"
     save_path = save_dir / filename
 
     # Prepare the URL by replacing spaces with underscores.
@@ -45,26 +46,25 @@ def download_image(prompt: str, save_dir: str) -> str:
             file.write(response.content)
         print(f"Success! Image saved as: {filename}")
         
-        # Crop the bottom 15% of the image.
         crop_bottom_15_percent(str(save_path))
         
-        # Return a relative URL; we assume our Flask app serves images from '/images/'
-        return f"/images/{filename}"
+        # Return a URL for Flask to serve; note the updated path to '/donate/images/'
+        return f"/donate/images/{filename}"
     except requests.exceptions.RequestException as e:
         print(f"Error downloading image: {e}")
         return None
 
 def generate_images(prompt: str, num_images: int = 1) -> list:
     """
-    Generates a list of image URLs (relative) by downloading the specified number of images
-    based on the given prompt.
+    Generates a list of image URLs (relative) by downloading the specified number
+    of images based on the given prompt.
     
     Args:
         prompt (str): The image generation prompt.
         num_images (int): The number of images to generate.
         
     Returns:
-        list: A list of relative URLs (e.g., ["/images/image_timestamp.jpg", ...]).
+        list: A list of relative URLs (e.g., ["/donate/images/image_timestamp.png", ...]).
     """
     save_dir = "data/generate_images"
     image_urls = []
@@ -74,5 +74,3 @@ def generate_images(prompt: str, num_images: int = 1) -> list:
         if url:
             image_urls.append(url)
     return image_urls
-
-# Remove any interactive main block so this module is solely used as an API.
