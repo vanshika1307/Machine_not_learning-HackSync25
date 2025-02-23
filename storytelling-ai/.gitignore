@@ -3,4 +3,4 @@ venv/
 test.txt
 train.txt
 valid.txt
-
+fine_tuned_model/
