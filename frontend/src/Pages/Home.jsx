@@ -1,8 +1,23 @@
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import AdventureSection from "../components/AdventureSection";
+import Preloader from "../Components/Preloader/preloader";
 
 const Home = () => {
+    const [loading, setLoading] = useState(true);
+  
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 1800); // Increased to 5 seconds for complete loading
+  
+      return () => clearTimeout(timer);
+    }, []);
+  
+    if (loading) {
+      return <Preloader />;
+    }
   return (
     <div className="min-h-screen flex flex-col justify-between bg-[#0a0b1d]">
       {/* Hero Section */}
