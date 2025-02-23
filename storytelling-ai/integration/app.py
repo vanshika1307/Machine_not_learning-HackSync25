@@ -1,4 +1,3 @@
-
 import os
 import sys
 
@@ -13,17 +12,18 @@ from modules.image_generator import generate_images
 
 app = Flask(__name__)
 
-# Optional: a simple index route to verify the Flask backend.
 @app.route("/", methods=["GET"])
 def index():
     return render_template_string("<h1>Flask API is running</h1><p>Use the /generate_images endpoint to generate images.</p>")
 
-# Serve generated images from "data/generate_images" via /donate/images/<filename>
+# Serve generated images from the "data/generate_images" folder via /donate/images/<filename>
 @app.route("/donate/images/<path:filename>")
 def serve_image(filename):
-    return send_from_directory("data/generate_images", filename)
+    images_dir = os.path.join(os.getcwd(), "data", "generate_images")
+    print("Serving image from:", images_dir)
+    return send_from_directory(images_dir, filename)
 
-# Endpoint for generating images. (POST only)
+# Endpoint for generating images (POST only).
 @app.route("/generate_images", methods=["POST"])
 def generate_images_endpoint():
     data = request.get_json()
@@ -41,4 +41,3 @@ def generate_images_endpoint():
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
-

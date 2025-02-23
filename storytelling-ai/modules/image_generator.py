@@ -1,5 +1,3 @@
-
-
 import requests
 import os
 from pathlib import Path
@@ -25,9 +23,11 @@ def download_image(prompt: str, save_dir: str) -> str:
     Downloads an image from pollinations.ai based on the prompt,
     crops the bottom 15% of the image, and returns a relative URL.
     The image is saved in PNG format.
+
+    Note: Pollinations.ai only supports one model.
     """
-    # Ensure the directory exists.
-    save_dir = Path(save_dir)
+    base_dir = os.getcwd()
+    save_dir = Path(os.path.join(base_dir, save_dir))
     save_dir.mkdir(parents=True, exist_ok=True)
     
     # Create a unique filename using a timestamp.
@@ -35,9 +35,13 @@ def download_image(prompt: str, save_dir: str) -> str:
     filename = f"image_{timestamp}.png"
     save_path = save_dir / filename
 
-    # Prepare the URL by replacing spaces with underscores.
+    print(f"Saving image to: {save_path}")
+
+    # Prepare the URL prompt by replacing spaces with underscores.
     url_prompt = prompt.replace(" ", "_")
-    url = f"https://pollinations.ai/p/{url_prompt}"
+    
+    # Construct the URL. Since there is only one model, no additional parameter is required.
+    url = f"https://image.pollinations.ai/prompt/{url_prompt}"
     
     try:
         response = requests.get(url)
@@ -48,7 +52,7 @@ def download_image(prompt: str, save_dir: str) -> str:
         
         crop_bottom_15_percent(str(save_path))
         
-        # Return a URL for Flask to serve; note the updated path to '/donate/images/'
+        # Return a relative URL for Flask to serve.
         return f"/donate/images/{filename}"
     except requests.exceptions.RequestException as e:
         print(f"Error downloading image: {e}")
@@ -59,12 +63,8 @@ def generate_images(prompt: str, num_images: int = 1) -> list:
     Generates a list of image URLs (relative) by downloading the specified number
     of images based on the given prompt.
     
-    Args:
-        prompt (str): The image generation prompt.
-        num_images (int): The number of images to generate.
-        
     Returns:
-        list: A list of relative URLs (e.g., ["/donate/images/image_timestamp.png", ...]).
+        list: A list of relative URLs (e.g., ["/donate/images/image_TIMESTAMP.png", ...]).
     """
     save_dir = "data/generate_images"
     image_urls = []

@@ -10,7 +10,7 @@ import VolunteerMap from "./pages/VolunteerMap";
 import EventCalendar from "./pages/EventCalendar";
 import CommunityDashBoard from "./pages/CommunityDashboard";
 import EducationTraining from "./pages/EducationTraining";
-import ImageGeneratorPage from "./pages/ImageGeneratorPage";
+import ImageGeneratorPage from "./Pages/ImageGeneratorPage";
 import Checkout from "./components/Checkout";
 import Dashboard from "./pages/Dashboard";
 import Register from "./pages/register";

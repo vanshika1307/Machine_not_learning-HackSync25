@@ -52,7 +52,6 @@ const ImageGeneratorPage = () => {
 
   return (
     <div className="min-h-screen bg-[#0a0b1d] py-12 px-4 sm:px-6 lg:px-8">
-      {/* Hero Section */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -67,14 +66,12 @@ const ImageGeneratorPage = () => {
       </motion.div>
 
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8">
-        {/* Control Panel */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           className="lg:w-1/3 bg-gray-900/50 p-6 rounded-xl border border-gray-800"
         >
           <div className="space-y-6">
-            {/* Prompt Input */}
             <div>
               <label className="block text-white mb-2">Your Prompt</label>
               <textarea
@@ -85,7 +82,6 @@ const ImageGeneratorPage = () => {
               />
             </div>
 
-            {/* Image Count */}
             <div>
               <label className="block text-white mb-2">Number of Images</label>
               <select
@@ -99,7 +95,6 @@ const ImageGeneratorPage = () => {
               </select>
             </div>
 
-            {/* Aspect Ratio */}
             <div>
               <label className="block text-white mb-2">Aspect Ratio</label>
               <select
@@ -113,7 +108,6 @@ const ImageGeneratorPage = () => {
               </select>
             </div>
 
-            {/* Generate Button */}
             <button
               onClick={generateImages}
               disabled={loading || !prompt}
@@ -134,7 +128,6 @@ const ImageGeneratorPage = () => {
           </div>
         </motion.div>
 
-        {/* Generated Images Grid */}
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -163,8 +156,7 @@ const ImageGeneratorPage = () => {
               </div>
             </div>
           ))}
-          
-          {/* Empty State */}
+
           {!loading && generatedImages.length === 0 && (
             <div className="col-span-2 flex flex-col items-center justify-center h-64 bg-gray-900/30 rounded-xl border border-gray-800">
               <Image className="w-16 h-16 text-gray-600 mb-4" />
