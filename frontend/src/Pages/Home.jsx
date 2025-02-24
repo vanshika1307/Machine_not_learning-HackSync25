@@ -5,6 +5,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase/config';
 import AdventureSection from "../components/AdventureSection";
 import Preloader from "../Components/Preloader/preloader";
+import ChatBot from "../Components/Chatbot";
 
 console.log('Home component rendering');
 
@@ -82,6 +83,7 @@ const Home = () => {
       </div>
 
       <AdventureSection />
+      <ChatBot />
     </div>
   );
 };

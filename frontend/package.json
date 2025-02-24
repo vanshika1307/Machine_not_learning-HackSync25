@@ -10,9 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@babel/runtime": "^7.26.9",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@fontsource/dancing-script": "^5.1.1",
+    "@google/generative-ai": "^0.22.0",
     "@mui/icons-material": "^6.1.1",
     "@mui/material": "^6.4.5",
     "@mui/x-charts": "^7.17.0",
@@ -34,11 +36,14 @@
     "react-joyride": "^2.9.2",
     "react-leaflet": "^4.2.1",
     "react-router-dom": "^6.29.0",
+    "react-speech-recognition": "^3.10.0",
     "recharts": "^2.12.7",
+    "regenerator-runtime": "^0.14.1",
     "resend": "^4.1.2",
     "three": "^0.168.0"
   },
   "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.26.9",
     "@eslint/js": "^9.9.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
