@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Book, Type, History, Settings2, Sparkles, RotateCcw } from "lucide-react";
+import { useState } from "react";
+import { Book, Type, History, Settings2, Sparkles, RotateCcw, Mic } from "lucide-react";
 import { Alert as MuiAlert } from "@mui/material";
 import { motion } from "framer-motion";
 
@@ -20,6 +20,40 @@ const StoryGenerator = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [wordCount, setWordCount] = useState(500);
+  const [isListening, setIsListening] = useState(false);
+  const [language, setLanguage] = useState("en-US"); // Default language is English
+
+  // Initialize SpeechRecognition
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const recognition = new SpeechRecognition();
+  recognition.continuous = false; // Stop after one sentence
+  recognition.interimResults = false; // Only final results
+  recognition.lang = language; // Set language based on user selection
+
+  // Handle speech recognition results
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    setPrompt((prevPrompt) => prevPrompt + " " + transcript); // Append the recognized text
+    setIsListening(false); // Stop listening after recognition
+  };
+
+  // Handle errors
+  recognition.onerror = (event) => {
+    console.error("Speech recognition error:", event.error);
+    setIsListening(false);
+  };
+
+  // Start speech-to-text
+  const startSpeechToText = () => {
+    if (isListening) {
+      recognition.stop();
+      setIsListening(false);
+    } else {
+      recognition.lang = language; // Set language before starting
+      recognition.start();
+      setIsListening(true);
+    }
+  };
 
   const handleGenerate = async () => {
     if (!prompt.trim() || !selectedGenre) {
@@ -165,6 +199,28 @@ const StoryGenerator = () => {
                 )}
               </button>
             </div>
+          </div>
+
+          {/* Speech-to-Text Section */}
+          <div className="flex items-center gap-4">
+            <label className="text-gray-400">Language:</label>
+            <select
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+              className="p-2 rounded-lg bg-[#1a1b3d] text-white"
+            >
+              <option value="en-US">English</option>
+              <option value="hi-IN">Hindi</option>
+            </select>
+            <button
+              onClick={startSpeechToText}
+              className={`flex items-center gap-2 px-6 py-3 rounded-lg bg-gradient-to-r from-green-600 to-teal-600 text-white font-medium hover:from-green-700 hover:to-teal-700 transition-all ${
+                isListening ? "animate-pulse" : ""
+              }`}
+            >
+              <Mic size={16} />
+              {isListening ? "Listening..." : "Speech-to-Text"}
+            </button>
           </div>
         </motion.div>
 
