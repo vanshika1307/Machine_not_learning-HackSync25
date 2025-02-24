@@ -53,6 +53,7 @@ const StoryGenerator = () => {
   return (
     <div className="min-h-screen bg-[#0a0b1a] pt-20 pb-10 px-4">
       <div className="max-w-5xl mx-auto space-y-8">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -64,6 +65,7 @@ const StoryGenerator = () => {
           </p>
         </motion.div>
 
+        {/* Alert */}
         {showAlert && (
           <MuiAlert
             severity="warning"
@@ -129,14 +131,12 @@ const StoryGenerator = () => {
               <Type size={20} />
               <span>Enter your prompt</span>
             </div>
-
             <textarea
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               className="w-full h-32 p-4 rounded-lg bg-[#1a1b3d] text-white border border-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               placeholder="Describe your story idea in detail..."
             />
-
             <div className="flex justify-between items-center">
               <button
                 onClick={() => setPrompt("")}
@@ -145,7 +145,6 @@ const StoryGenerator = () => {
                 <RotateCcw size={16} />
                 Clear
               </button>
-
               <button
                 onClick={handleGenerate}
                 disabled={isGenerating}
@@ -169,7 +168,7 @@ const StoryGenerator = () => {
           </div>
         </motion.div>
 
-        {/* Generated Story */}
+        {/* Generated Story Box */}
         {generatedStory && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -194,6 +193,26 @@ const StoryGenerator = () => {
             </div>
             <div className="prose prose-invert max-w-none">
               <p className="text-gray-300">{generatedStory}</p>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Story Metadata Section */}
+        {generatedStory && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-[#1a1b3d] rounded-xl p-6 shadow-lg"
+          >
+            <h2 className="text-2xl font-bold text-white mb-4">Story Metadata</h2>
+            <div className="text-white mb-2">
+              <strong>Title:</strong> {storyMetadata.title}
+            </div>
+            <div className="text-white mb-2">
+              <strong>Genre:</strong> {storyMetadata.genre}
+            </div>
+            <div className="text-white">
+              <strong>Premise:</strong> {storyMetadata.premise}
             </div>
           </motion.div>
         )}
