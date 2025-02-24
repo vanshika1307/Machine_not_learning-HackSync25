@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Book, Type, History, Settings2, Sparkles, Send, RotateCcw } from "lucide-react";
+import { Book, Type, History, Settings2, Sparkles, RotateCcw } from "lucide-react";
 import { Alert as MuiAlert } from "@mui/material";
 import { motion } from "framer-motion";
 
@@ -9,13 +9,14 @@ const genres = [
   { name: "Mystery", icon: "🔍", color: "from-purple-500 to-pink-500" },
   { name: "Romance", icon: "💝", color: "from-pink-500 to-rose-500" },
   { name: "Horror", icon: "👻", color: "from-gray-700 to-gray-900" },
-  { name: "Adventure", icon: "🗺️", color: "from-green-500 to-emerald-500" }
+  { name: "Adventure", icon: "🗺", color: "from-green-500 to-emerald-500" }
 ];
 
 const StoryGenerator = () => {
   const [prompt, setPrompt] = useState("");
   const [selectedGenre, setSelectedGenre] = useState(null);
   const [generatedStory, setGeneratedStory] = useState("");
+  const [storyMetadata, setStoryMetadata] = useState({ title: "", premise: "", genre: "" });
   const [isGenerating, setIsGenerating] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [wordCount, setWordCount] = useState(500);
@@ -26,11 +27,27 @@ const StoryGenerator = () => {
       return;
     }
     setIsGenerating(true);
-    // Simulate API call
-    setTimeout(() => {
-      setGeneratedStory("Your generated story will appear here...");
+    try {
+      const response = await fetch("http://localhost:5003/generate_story", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt,
+          genre: selectedGenre,
+          wordCount: wordCount
+        })
+      });
+      if (!response.ok) {
+        throw new Error("Failed to generate story");
+      }
+      const data = await response.json();
+      setGeneratedStory(data.story);
+      setStoryMetadata({ title: data.title, premise: data.premise, genre: data.genre });
+    } catch (error) {
+      console.error("Error generating story:", error);
+    } finally {
       setIsGenerating(false);
-    }, 2000);
+    }
   };
 
   return (
@@ -42,12 +59,14 @@ const StoryGenerator = () => {
           className="text-center space-y-4"
         >
           <h1 className="text-5xl font-bold text-white">Story Forge</h1>
-          <p className="text-gray-400 text-lg">Transform your ideas into captivating stories</p>
+          <p className="text-gray-400 text-lg">
+            Transform your ideas into captivating stories
+          </p>
         </motion.div>
 
         {showAlert && (
-          <MuiAlert 
-            severity="warning" 
+          <MuiAlert
+            severity="warning"
             onClose={() => setShowAlert(false)}
             sx={{ mb: 2 }}
           >
@@ -56,7 +75,7 @@ const StoryGenerator = () => {
         )}
 
         {/* Genre Selection */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
@@ -69,7 +88,7 @@ const StoryGenerator = () => {
               whileTap={{ scale: 0.95 }}
               onClick={() => setSelectedGenre(genre.name)}
               className={`p-4 rounded-xl bg-gradient-to-r ${genre.color} 
-                ${selectedGenre === genre.name ? 'ring-2 ring-white' : 'opacity-70'}
+                ${selectedGenre === genre.name ? "ring-2 ring-white" : "opacity-70"}
                 transition-all duration-300`}
             >
               <div className="text-2xl mb-2">{genre.icon}</div>
@@ -79,7 +98,7 @@ const StoryGenerator = () => {
         </motion.div>
 
         {/* Story Configuration */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
@@ -110,7 +129,7 @@ const StoryGenerator = () => {
               <Type size={20} />
               <span>Enter your prompt</span>
             </div>
-            
+
             <textarea
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
@@ -152,15 +171,22 @@ const StoryGenerator = () => {
 
         {/* Generated Story */}
         {generatedStory && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="bg-[#13142d] rounded-xl p-6 shadow-lg"
           >
             <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2 text-white">
-                <Book size={20} />
-                <span>Generated Story</span>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2 text-white">
+                  <Book size={20} />
+                  <span>Generated Story</span>
+                </div>
+                {storyMetadata.title && (
+                  <div className="text-white text-lg font-semibold">
+                    {storyMetadata.title}
+                  </div>
+                )}
               </div>
               <button className="text-gray-400 hover:text-white transition-colors">
                 <History size={20} />

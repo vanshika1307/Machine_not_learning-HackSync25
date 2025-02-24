@@ -1,5 +1,3 @@
-# pipeline.py
-
 import os
 import sys
 
@@ -76,16 +74,25 @@ def generate_character_backstory(name: str, full_story_text: str) -> str:
     return parse_label_output(raw_summary, "Character Summary:")
 
 # ---------------------------------------------------------------------
-# MAIN PIPELINE
+# FUNCTION FOR API INTEGRATION (NON-INTERACTIVE)
 # ---------------------------------------------------------------------
 
-def run_pipeline(initial_prompt: str, story_id: str):
+def generate_story(initial_prompt: str, story_id: str) -> dict:
     """
-    1. Generate the initial story from the user's prompt.
-    2. Auto-extract genre, premise, and title from the story text (no user input).
-    3. Improve the story's dialogue with more emotion (DialoGPT).
-    4. Extract characters and store a summary as their 'backstory'.
-    5. Allow the user to expand the story, repeating steps 3 & 4 each time.
+    Generates a story using the initial_prompt and updates story metadata.
+    Returns a dictionary with the following keys:
+      - title: The auto-extracted title of the story.
+      - genre: The auto-extracted genre.
+      - premise: The auto-extracted premise.
+      - story: The improved story text.
+    
+    This function performs:
+      1. Initial story generation.
+      2. Automatic extraction of metadata (genre, premise, title).
+      3. Dialogue improvement.
+      4. Updates the story metadata and content storage.
+    
+    Note: This version does not include the interactive expansion loop.
     """
     # 1) Generate the initial story
     raw_generation = generate_idea(initial_prompt, max_length=2000)
@@ -96,7 +103,46 @@ def run_pipeline(initial_prompt: str, story_id: str):
     auto_premise = extract_premise_from_story(raw_generation)
     auto_title = extract_title_from_story(raw_generation)
 
-    # 3) Improve the dialogue (remove the prompt so we don't re-improve instructions)
+    # 3) Improve the dialogue (remove the prompt so we don't re-apply instructions)
+    story_text = raw_generation.replace(initial_prompt, "").strip()
+    improved_story = improve_dialogue(story_text)
+    print("\n=== Improved Story (Dialogue Enhanced) ===\n", improved_story)
+
+    # 4) Update story metadata and content (optional persistence)
+    update_story_metadata(story_id, title=auto_title, premise=auto_premise, genre=auto_genre)
+    append_story_content(story_id, improved_story)
+
+    return {
+         "title": auto_title,
+         "genre": auto_genre,
+         "premise": auto_premise,
+         "story": improved_story
+    }
+
+# ---------------------------------------------------------------------
+# LEGACY INTERACTIVE PIPELINE (WITH EXPANSION LOOP)
+# ---------------------------------------------------------------------
+
+def run_pipeline(initial_prompt: str, story_id: str):
+    """
+    1. Generate the initial story from the user's prompt.
+    2. Auto-extract genre, premise, and title from the story text (no user input).
+    3. Improve the story's dialogue with more emotion.
+    4. Extract characters and store a summary as their 'backstory'.
+    5. Allow the user to expand the story interactively.
+    
+    This function runs in an interactive mode via the CLI.
+    """
+    # 1) Generate the initial story
+    raw_generation = generate_idea(initial_prompt, max_length=2000)
+    print("=== Generated Raw Story ===\n", raw_generation)
+
+    # 2) Auto-extract metadata
+    auto_genre = extract_genre_from_story(raw_generation)
+    auto_premise = extract_premise_from_story(raw_generation)
+    auto_title = extract_title_from_story(raw_generation)
+
+    # 3) Improve the dialogue (remove the prompt so we don't re-apply instructions)
     story_text = raw_generation.replace(initial_prompt, "").strip()
     improved_story = improve_dialogue(story_text)
     print("\n=== Improved Story (Dialogue Enhanced) ===\n", improved_story)
@@ -114,7 +160,7 @@ def run_pipeline(initial_prompt: str, story_id: str):
         char_backstory = generate_character_backstory(char_name, improved_story)
         update_character_in_story(story_id, char_name, personality=char_backstory, backstory=char_backstory)
 
-    # 6) Allow story expansions
+    # 6) Interactive Expansion Loop
     full_story_so_far = improved_story
     while True:
         expansion_prompt = input("\nEnter an additional prompt to expand the story (or press enter to finish): ")
@@ -131,7 +177,6 @@ def run_pipeline(initial_prompt: str, story_id: str):
                 continue
             char_backstory = generate_character_backstory(char_name, full_story_so_far)
             update_character_in_story(story_id, char_name, personality=char_backstory, backstory=char_backstory)
-
 
 if __name__ == "__main__":
     story_id = input("Enter story ID: ")

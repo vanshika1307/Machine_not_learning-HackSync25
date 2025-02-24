@@ -34,7 +34,7 @@ const FeaturesSection = () => {
           >
             <h4 className="text-white text-2xl mb-2 font-bold">Purpose-built Creative Editor</h4>
             <p className="text-blue-300 mb-4">
-              Centered around creativity, NovelAI's Image Generation UI keeps you focused on the thing that matters most, your images.
+              Centered around creativity, Kahani AI's Image Generation UI keeps you focused on the thing that matters most, your images.
             </p>
             <motion.div 
               className="bg-[#0d0e24] rounded-lg overflow-hidden"
@@ -208,7 +208,11 @@ const ImageGrid = () => {
                 "0 0 20px rgba(255, 204, 0, 0.5)"
               ]
             }}
-            transition={{ duration: 8, repeat: Infinity }}
+            transition={{ 
+              duration: 4, // Reduced from 8 to 4 for faster animation
+              repeat: Infinity,
+              ease: "linear" // Added linear easing for smooth rotation
+            }}
           >
             <motion.span 
               className="text-black text-2xl font-bold"
@@ -246,14 +250,15 @@ const ImageGrid = () => {
                   rotate: [0, 360],
                 }}
                 transition={{ 
-                  duration: 15, // Increased speed
+                  duration: 8, // Reduced from 15 to 8 for faster rotation
                   repeat: Infinity,
-                  delay: index * 0.2 
+                  delay: index * 0.1, // Reduced from 0.2 to 0.1 for quicker sequential appearance
+                  ease: "linear" // Added linear easing for smooth rotation
                 }}
                 whileHover={{ 
                   scale: 1.3,
                   zIndex: 20,
-                  transition: { duration: 0.3 }
+                  transition: { duration: 0.2 } // Reduced from 0.3 to 0.2 for snappier hover
                 }}
               >
                 <img 
